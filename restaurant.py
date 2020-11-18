@@ -14,6 +14,7 @@ class TripadvisorItem(scrapy.Item):
 	num_valoracion = scrapy.Field()
 	valoracion = scrapy.Field()
 	telefono = scrapy.Field()
+	url_mapa = scrapy.Field()
 
 
 class TripadvisorSpider(CrawlSpider):
@@ -61,6 +62,7 @@ class TripadvisorSpider(CrawlSpider):
 		item['num_valoracion'] = response.xpath('normalize-space(//span[@class="_3Wub8auF"])').extract_first()
 		item['valoracion'] = response.xpath('normalize-space(//span[@class="r2Cf69qf"])').extract_first()
 		item['telefono'] = response.xpath('normalize-space(//div[@class="bk7Uv0cc"]/div[position()=3]/span[position()=2]/span/span[position()=2]/a/text())').extract_first()
+		item['url_mapa'] = map_utils.obtener_url_mapa(item['nombre'])
 
 		try:
 			insertar_datos("restaurant_visitados",direccion_url)
