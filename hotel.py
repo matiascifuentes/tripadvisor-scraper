@@ -5,6 +5,7 @@ import scrapy
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 import file_utils
+import map_utils
 
 class TripadvisorItem(scrapy.Item):
 	nombre = scrapy.Field()
@@ -14,6 +15,7 @@ class TripadvisorItem(scrapy.Item):
 	direccion = scrapy.Field()
 	num_valoracion = scrapy.Field()
 	valoracion = scrapy.Field()
+	url_mapa = scrapy.Field()
 
 class TripadvisorSpider(CrawlSpider):
 
@@ -63,6 +65,7 @@ class TripadvisorSpider(CrawlSpider):
 		item['direccion'] = response.xpath('normalize-space(//span[@class="_3ErVArsu jke2_wbp"])').extract_first()
 		item['num_valoracion'] = response.xpath('normalize-space(//span[@class="_33O9dg0j"])').extract_first()
 		item['valoracion'] = response.xpath('normalize-space(//span[@class="_3cjYfwwQ"])').extract_first()
+		item['url_mapa'] = map_utils.obtener_url_mapa(item['nombre'])
 
 		try:
 			file_utils.insertar_datos("hoteles_visitados",direccion_url)
