@@ -31,14 +31,9 @@ class TripadvisorSpider(CrawlSpider):
 	start_urls = [busca]
 
 	file = open("hoteles_visitados.txt", "a+") 
-	datos_visitados = file.read()
 	file.close()
 
-	if datos_visitados == '':
-		url_visitadas = None
-	else:
-		url_visitadas = []
-		url_visitadas = file_utils.leer_datos("hoteles_visitados") 
+	url_visitadas = file_utils.leer_datos("hoteles_visitados") 
 
 	rules = (
 
