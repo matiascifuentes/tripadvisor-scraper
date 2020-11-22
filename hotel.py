@@ -6,6 +6,11 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 import file_utils
 import map_utils
+import db_utils
+
+
+db = db_utils.crear_conexion()
+
 
 class TripadvisorItem(scrapy.Item):
 	nombre = scrapy.Field()
@@ -64,6 +69,7 @@ class TripadvisorSpider(CrawlSpider):
 
 		try:
 			file_utils.insertar_datos("hoteles_visitados",direccion_url)
+			db_utils.insertar_hotel(db,item)
 			print("Datos insertados correctamente.")
 		except:
 			print("No se han insertado.")
