@@ -5,6 +5,7 @@ import scrapy
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 import file_utils
+import map_utils
 import db_utils
 
 db = db_utils.crear_conexion()
@@ -36,7 +37,7 @@ class TripadvisorSpider(CrawlSpider):
 	file = open("restaurant_visitados.txt", "a+") 
 	file.close()
 
-	url_visitadas = leer_datos("restaurant_visitados")
+	url_visitadas = file_utils.leer_datos("restaurant_visitados")
 
 	#Reglas para la extraccion de url.
 	rules = (
@@ -68,7 +69,7 @@ class TripadvisorSpider(CrawlSpider):
 		item['url_mapa'] = map_utils.obtener_url_mapa(item['nombre'])
 
 		try:
-			insertar_datos("restaurant_visitados",direccion_url)
+			file_utils.insertar_datos("restaurant_visitados",direccion_url)
 			db_utils.insertar_restaurant(db,item)
 			print("Datos insertados correctamente.")
 		except:
