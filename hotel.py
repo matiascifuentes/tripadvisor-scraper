@@ -60,7 +60,7 @@ class TripadvisorSpider(CrawlSpider):
 
 		#Extrayendo informacion.
 		direccion_url = response.url
-		item['cod_hotel'] = string_utils.extraer_cod_url(direccion_url)
+		item['cod_hotel'] = string_utils.extraer_cod_hotel_url(direccion_url)
 		item['nombre'] = response.xpath('normalize-space(//h1[@id="HEADING"])').extract_first()
 		item['url']  = response.url
 		item['descripcion'] = response.xpath('normalize-space(//div[@class="cPQsENeY"])').extract_first()
