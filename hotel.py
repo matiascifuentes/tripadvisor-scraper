@@ -7,12 +7,14 @@ from scrapy.linkextractors import LinkExtractor
 import file_utils
 import map_utils
 import db_utils
+import string_utils
 
 
 db = db_utils.crear_conexion()
 
 
 class TripadvisorItem(scrapy.Item):
+	cod_hotel = scrapy.Field()
 	nombre = scrapy.Field()
 	url = scrapy.Field()
 	descripcion = scrapy.Field()
@@ -58,6 +60,7 @@ class TripadvisorSpider(CrawlSpider):
 
 		#Extrayendo informacion.
 		direccion_url = response.url
+		item['cod_hotel'] = string_utils.extraer_cod_url(direccion_url)
 		item['nombre'] = response.xpath('normalize-space(//h1[@id="HEADING"])').extract_first()
 		item['url']  = response.url
 		item['descripcion'] = response.xpath('normalize-space(//div[@class="cPQsENeY"])').extract_first()
