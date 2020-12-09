@@ -1,0 +1,4 @@
+__pycache__/
+hoteles_visitados.txt
+restaurant_visitados.txt
+geckodriver.log
