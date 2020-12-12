@@ -60,6 +60,15 @@ class TripadvisorSpider(CrawlSpider):
 
 		#Extrayendo informacion.
 		direccion_url = response.url
+		item['cod_atraccion'] = string_utils.extraer_cod_atraccion_url(direccion_url)
+		item['nombre'] = response.xpath('normalize-space(//h1[@id="HEADING"])').extract_first()
+		item['url']  = response.url
+		item['descripcion'] = None
+		item['ciudad'] = response.xpath('normalize-space(//ul[@class="breadcrumbs"]/li[position()=4]/a/span/text())').extract_first()
+		item['direccion'] = response.xpath('normalize-space(//div[@class="LjCWTZdN"]/span[position()=2])').extract_first()
+		item['num_valoracion'] = response.xpath('normalize-space(//span[@class="_3WF_jKL7 _1uXQPaAr"])').extract_first()
+		item['valoracion'] = None
+		item['url_mapa'] = map_utils.obtener_url_mapa(item['nombre'])
 
 		try:
 			file_utils.insertar_datos("atracciones_visitados",direccion_url)
