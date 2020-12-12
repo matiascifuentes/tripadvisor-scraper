@@ -11,3 +11,6 @@ def extraer_cod_hotel_url(url):
 
 def extraer_cod_restaurant_url(url):
 	return extraer_cod_url(url,45)
+
+def extraer_cod_atraccion_url(url):
+	return extraer_cod_url(url,45)
