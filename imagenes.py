@@ -27,8 +27,12 @@ def descargarImagenesHoteles(hoteles):
 
 	for hotel in hoteles:
 		print("Hotel: " + hotel)
-		url = obtenerUrlImagenHotel(driver,hotel)
-		descargarImagen(url, string_utils.extraer_cod_hotel_url(hotel), "img/hotel")
+		try:
+			url = obtenerUrlImagenHotel(driver,hotel)
+			descargarImagen(url, string_utils.extraer_cod_hotel_url(hotel), "images/hotel")
+			print("Descargada")
+		except:
+			print("No se ha descargado")
 
 	try:
 		driver.quit()
@@ -41,8 +45,13 @@ def descargarImagenesRestaurantes(restaurantes):
 	driver = webdriver.Firefox(options=options)
 
 	for restaurant in restaurantes:
-		url = obtenerUrlImagenRestaurant(driver,restaurant)
-		descargarImagen(url, string_utils.extraer_cod_restaurant_url(restaurant), "img/restaurant")
+		try:
+			print("Restaurant: " + restaurant)
+			url = obtenerUrlImagenRestaurant(driver,restaurant)
+			descargarImagen(url, string_utils.extraer_cod_restaurant_url(restaurant), "images/restaurant")
+			print("Descargada")
+		except:
+			print("No se ha descargado")
 
 	try:
 		driver.quit()
@@ -55,18 +64,23 @@ def descargarImagenesAtracciones(atracciones):
 	driver = webdriver.Firefox(options=options)
 
 	for atraccion in atracciones:
-		url = obtenerUrlImagenAtraccion(driver,atraccion)
-		descargarImagen(url, string_utils.extraer_cod_atraccion_url(url), "img/atraccion")
-
+		try:
+			print("Atraccion: " + atraccion)
+			url = obtenerUrlImagenAtraccion(driver,atraccion)
+			descargarImagen(url, string_utils.extraer_cod_atraccion_url(atraccion), "images/atraccion")
+			print("Descargada")
+		except:
+			print("No se ha descargado")
+			
 	try:
 		driver.quit()
 	except:
 		print("Ha ocurrido un error al cerrar navegador")
 
 def obtenerUrlImagenHotel(driver,urlHotel):
-
 	driver.get(urlHotel)
-
+	time.sleep(1)
+	
 	divImagen = driver.find_element_by_class_name("_29cJjU62")
 	driver.execute_script("arguments[0].click();", divImagen)
 
@@ -75,21 +89,30 @@ def obtenerUrlImagenHotel(driver,urlHotel):
 
 	imagen = soup.find('img',{'class':'_1a4WY7aS'})
 	urlImagen = imagen['src']
-	time.sleep(1)
 	return urlImagen
 
 def obtenerUrlImagenRestaurant(driver,urlRestaurant):
-
-
 	req = requests.get(urlRestaurant)
+	time.sleep(1)
+
 	soup = BeautifulSoup(req.text, "lxml")
 	divPhoto = soup.findAll("div", {"class": "large_photo_wrapper"})
 	imagen = divPhoto[0].findAll("img", {"class": "basicImg"})
 	urlImagen = imagen[0]["data-lazyurl"]
-	time.sleep(1)
 	return urlImagen
 
 def obtenerUrlImagenAtraccion(driver,urlAtraccion):
+	driver.get(urlAtraccion)
+	time.sleep(3)
+
+	divImagen = driver.find_element_by_class_name("_2n0JSv4h")
+	driver.execute_script("arguments[0].click();", divImagen)
+
+	nuevoHtml = driver.page_source
+	soup = BeautifulSoup(nuevoHtml, "lxml")
+
+	imagen = soup.find('img',{'class':'_1a4WY7aS'})
+	urlAtraccion = imagen['src']
 	return urlAtraccion
 
 
@@ -106,8 +129,8 @@ hoteles = file_utils.leer_datos("hoteles_visitados")
 restaurantes = file_utils.leer_datos("restaurant_visitados")
 atracciones = file_utils.leer_datos("atracciones_visitados")
 
-#descargarImagenesHoteles(hoteles)
-#time.sleep(60)
+descargarImagenesHoteles(hoteles)
+time.sleep(30)
 descargarImagenesRestaurantes(restaurantes)
-#time.sleep(60)
-#descargarImagenesAtracciones(atracciones)
+time.sleep(30)
+descargarImagenesAtracciones(atracciones)
