@@ -18,11 +18,13 @@ def insertar_servicio(db,datos):
 	db.commit()
 
 def insertar_hotel(db,item):
-	sentencia = "INSERT INTO hotel(COD_HOTEL,NOMBRE,URL,DESCRIPCION,CIUDAD,DIRECCION,NUM_VALORACION,VALORACION,URL_MAPA) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s);"
-	datos = (item['cod_hotel'],item['nombre'],item['url'],item['descripcion'],item['ciudad'],item['direccion'],item['num_valoracion'],item['valoracion'],item['url_mapa'])
+	datos_servicio = (item['cod_hotel'],item['nombre'],item['url'],item['direccion'],item['ciudad'],item['descripcion'],item['valoracion'],item['num_valoracion'],item['url_mapa'])
+	insert_servicio(db,datos_servicio)
 
+	insert_hotel = "INSERT INTO hotel(id_servicio) VALUES (%s);"
+	datos_hotel = (item['cod_hotel'])
 	cursor = db.cursor()
-	cursor.execute(sentencia,datos)
+	cursor.execute(insert_hotel,datos_hotel)
 	db.commit()
 
 def insertar_restaurant(db,item):
