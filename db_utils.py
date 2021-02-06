@@ -36,3 +36,13 @@ def insertar_restaurant(db,item):
 	cursor = db.cursor()
 	cursor.execute(insert_restaurant,datos_restaurant)
 	db.commit()
+
+def insertar_atraccion(db,item):
+	datos_servicio = (item['cod_atraccion'],item['nombre'],item['url'],item['direccion'],item['ciudad'],item['descripcion'],item['valoracion'],item['num_valoracion'],item['url_mapa'])
+	insert_servicio(db,datos_servicio)
+
+	insert_atraccion = "INSERT INTO atraccion(id_servicio) VALUES (%s);"
+	datos_atraccion = (item['cod_atraccion'])
+	cursor = db.cursor()
+	cursor.execute(insert_atraccion,datos_atraccion)
+	db.commit()
